@@ -1,20 +1,20 @@
-version: '3.9'
+version: "3.9"
 
 services:
   kafka1:
     image: confluentinc/cp-kafka:${VERSION}
     environment:
       TZ: America/Guayaquil
-      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka1:9092,EXTERNAL://localhost:19093
-      KAFKA_BROKER_ID: '1'
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka1:9092,EXTERNAL://localhost:19092
+      KAFKA_BROKER_ID: "1"
       KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
-      KAFKA_LISTENERS: INTERNAL://0.0.0.0:9092,EXTERNAL://0.0.0.0:19093
+      KAFKA_LISTENERS: INTERNAL://0.0.0.0:9092,EXTERNAL://0.0.0.0:19092
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
       KAFKA_ZOOKEEPER_CONNECT: zookeeper1:2181,zookeeper2:2181,zookeeper3:2181
-      KAFKA_JMX_PORT: '19999'
+      KAFKA_JMX_PORT: "19999"
     ports:
-      - 19093:19093
-      - 19999:19999
+      - "19092:19092"
+      - "19999:19999"
     restart: on-failure
     volumes:
       - kafka1_data:/var/lib/kafka/data
@@ -33,16 +33,16 @@ services:
     image: confluentinc/cp-kafka:${VERSION}
     environment:
       TZ: America/Guayaquil
-      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka2:9092,EXTERNAL://localhost:29093
-      KAFKA_BROKER_ID: '2'
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka2:9092,EXTERNAL://localhost:29092
+      KAFKA_BROKER_ID: "2"
       KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
-      KAFKA_LISTENERS: INTERNAL://0.0.0.0:9092,EXTERNAL://0.0.0.0:29093
+      KAFKA_LISTENERS: INTERNAL://0.0.0.0:9092,EXTERNAL://0.0.0.0:29092
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
       KAFKA_ZOOKEEPER_CONNECT: zookeeper1:2181,zookeeper2:2181,zookeeper3:2181
-      KAFKA_JMX_PORT: '29999'
+      KAFKA_JMX_PORT: "29999"
     ports:
-      - 29093:29093
-      - 29999:29999
+      - "29092:29092"
+      - "29999:29999"
     restart: on-failure
     volumes:
       - kafka2_data:/var/lib/kafka/data
@@ -61,16 +61,16 @@ services:
     image: confluentinc/cp-kafka:${VERSION}
     environment:
       TZ: America/Guayaquil
-      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka3:9092,EXTERNAL://localhost:39093
-      KAFKA_BROKER_ID: '3'
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka3:9092,EXTERNAL://localhost:39092
+      KAFKA_BROKER_ID: "3"
       KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
-      KAFKA_LISTENERS: INTERNAL://0.0.0.0:9092,EXTERNAL://0.0.0.0:39093
+      KAFKA_LISTENERS: INTERNAL://0.0.0.0:9092,EXTERNAL://0.0.0.0:39092
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
       KAFKA_ZOOKEEPER_CONNECT: zookeeper1:2181,zookeeper2:2181,zookeeper3:2181
-      KAFKA_JMX_PORT: '39999'
+      KAFKA_JMX_PORT: "39999"
     ports:
-      - 39093:39093
-      - 39999:39999
+      - "39092:39092"
+      - "39999:39999"
     restart: on-failure
     volumes:
       - kafka3_data:/var/lib/kafka/data
@@ -89,13 +89,13 @@ services:
     image: confluentinc/cp-zookeeper:${VERSION}
     environment:
       TZ: America/Guayaquil
-      ZOOKEEPER_CLIENT_PORT: '2181'
+      ZOOKEEPER_CLIENT_PORT: "2181"
       ZOOKEEPER_SERVERS: zookeeper1:2888:3888
-      ZOOKEEPER_SERVER_ID: '1'
-      ZOOKEEPER_SYNC_LIMIT: '2'
-      ZOOKEEPER_TICK_TIME: '2000'
+      ZOOKEEPER_SERVER_ID: "1"
+      ZOOKEEPER_SYNC_LIMIT: "2"
+      ZOOKEEPER_TICK_TIME: "2000"
     ports:
-      - 12181:2181
+      - "2181:2181"
     restart: on-failure
     volumes:
       - zookeeper1_data:/var/lib/zookeeper/data
@@ -112,13 +112,13 @@ services:
     environment:
       TZ: America/Guayaquil
       SCHEMA_REGISTRY_ACCESS_CONTROL_ALLOW_METHODS: GET,POST,PUT,OPTIONS
-      SCHEMA_REGISTRY_ACCESS_CONTROL_ALLOW_ORIGIN: '*'
-      SCHEMA_REGISTRY_DEBUG: 'true'
+      SCHEMA_REGISTRY_ACCESS_CONTROL_ALLOW_ORIGIN: "*"
+      SCHEMA_REGISTRY_DEBUG: "true"
       SCHEMA_REGISTRY_HOST_NAME: localhost
       SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: kafka1:9092,kafka2:9092,kafka3:9092
       SCHEMA_REGISTRY_KAFKASTORE_TOPIC: kafka-schema-registry.schemas
     ports:
-      - 8081:8081
+      - "8081:8081"
     restart: on-failure
     depends_on:
       kafka1:
@@ -140,7 +140,7 @@ services:
   akhq:
     image: tchiotludo/akhq:latest
     ports:
-      - 8080:8080
+      - "8080:8080"
     restart: on-failure
     depends_on:
       schema-registry:
