@@ -1,8 +1,8 @@
 # kafka-streams-sandbox
 
-Kafka streams examples collection based
-on [Mastering Kafka Streams and ksqlDB](https://github.com/mitch-seymour/mastering-kafka-streams-and-ksqldb) by Mitch
-Seymour.
+Kafka streams examples collection.
+
+## Kafka CLI
 
 Install kafka cli tools using https://github.com/sauljabin/kafka-cli-installer.
 
@@ -26,8 +26,8 @@ Open http://localhost:8080/ on the browser.
 
 ## 1. Sentiment Analysis of Cryptocurrency Tweets
 
-> Copyright © 2021 Mitch Seymour. All rights reserved.
->
+> Copyright © 2021 Mitch Seymour. All rights reserved. [Mastering Kafka Streams and ksqlDB](https://github.com/mitch-seymour/mastering-kafka-streams-and-ksqldb).
+
 In this tutorial, we will explore the use case of algorithmic trading.
 Sometimes called high-frequency trading (HFT), this lucrative practice involves building software to evaluate and
 purchase securities automatically, by processing and responding to many types of market signals with minimal latency. To
@@ -61,18 +61,31 @@ guide as we build our stateless Kafka Streams application. The key concepts in e
 
 ![](screenshots/chapter3.png)
 
-### Steps
-
 Create a `tweets` topic:
 
 ```shell
 kafka-topics --create --bootstrap-server localhost:19092 \
-  --topic tweets --replication-factor 2 --partitions 3
+  --replication-factor 2 --partitions 3 \
+  --topic tweets
 ```
 
 Create a `crypto-sentiment` topic:
 
 ```shell
 kafka-topics --create --bootstrap-server localhost:19092 \
-  --topic crypto-sentiment --replication-factor 2 --partitions 3
+  --replication-factor 2 --partitions 3 \
+  --topic crypto-sentiment
+```
+
+Run exercise:
+
+```shell
+./gradlew sentiment-analysis:run
+```
+
+Produce tweets:
+
+```shell
+kafka-console-producer --bootstrap-server localhost:19092 \
+  --topic tweets < sentiment-analysis/data/tweets.json
 ```
