@@ -55,7 +55,7 @@ public class SentimentAnalysisTopology {
         mergedStream.print(Printed.<String, Tweet>toSysOut().withLabel("mergedStream"));
 
         // step 6 add sentiment
-        KStream<String, Sentiment> sentimentStream = mergedStream.flatMapValues(tweet -> SentimentAnalyzer.analyze(tweet));
+        KStream<String, Sentiment> sentimentStream = mergedStream.flatMapValues(SentimentAnalyzer::analyze);
         sentimentStream.print(Printed.<String, Sentiment>toSysOut().withLabel("mergedStream"));
 
         // step 7 produce sentiment to crypto-sentiment
