@@ -59,6 +59,7 @@ public class LeaderboardTopology {
                         .withValueSerde(JsonSerdes.HighScores())
         );
 
+        // step 6 show
         scoresTable.toStream().to(HIGH_SCORES_TOPIC, Produced.with(Serdes.String(), JsonSerdes.HighScores()));
 
         return builder.build();

@@ -35,11 +35,6 @@ assist our fictional trading software, we will build a stream processing applica
 sentiment around different types of cryptocurrencies (Bitcoin, Ethereum, Ripple, etc.), and use these sentiment scores
 as investment/divestment signals in a custom trading algorithm.
 
-Since millions of people use Twitter to share their thoughts on cryptocurrencies and other topics, we will use Twitter
-as the data source for our application. Before we get started, let’s look at the steps required to build our stream
-processing application. We will then use these requirements to design a processor topology, which will be a helpful
-guide as we build our stateless Kafka Streams application.
-
 1. Tweets that mention certain digital currencies (#bitcoin, #ethereum) should be consumed from a source topic called
    tweets:
     * Since each record is JSON-encoded, we need to figure out how to properly deserialize these records into
@@ -136,7 +131,6 @@ kafka-topics --create --bootstrap-server localhost:19092 \
 
 kafka-topics --create --bootstrap-server localhost:19092 \
   --replication-factor 2 --partitions 3 \
-  --config cleanup.policy=compact \
   --topic high-scores
 ```
 
@@ -164,4 +158,81 @@ kafka-console-producer \
 kafka-console-producer \
   --bootstrap-server localhost:19092 \
   --topic score-events < game-leaderboard/data/score-events.json
+```
+
+## 3. Patient Monitoring
+
+> Copyright © 2021 Mitch Seymour. All rights
+> reserved. [Mastering Kafka Streams and ksqlDB](https://github.com/mitch-seymour/mastering-kafka-streams-and-ksqldb).
+
+This exercise try to detect the presence of a medical condition called `systemic inflammatory response syndrome`, or
+SIRS. There are several vital signs, including body temperature, blood pressure, and heart rate, that can be used as
+indicators of SIRS. In this
+tutorial, we will look at two of these measurements: body temperature and heart rate. When both of these vitals reach
+predefined thresholds (`heart rate >= 100` beats per minute, `body temperature >= 100.4°F`), we will send a record to an
+alerts topic to notify the appropriate medical personnel.
+
+1. Our Kafka cluster contains two topics that capture patient vitals measurements:
+    * The `pulse-events` topic is populated by a heartbeat sensor. Every time the sensor picks up a patient’s heartbeat,
+      it appends a record to this topic. Records are keyed by patient ID.
+    * The body-temp-events topic is populated by a wireless body temperature sensor. Every time the patient’s core body
+      temperature is taken, a record is appended to this topic. These records are also keyed by patient ID.
+2. In order to detect elevated heart rates, we need to convert the raw pulse events into a heart rate (measured using
+   beats per minute, or bpm). As we learned in the previous chapter, we must first group the records to satisfy Kafka
+   Streams’ prerequisite for performing aggregations.
+3. We will use a windowed aggregation to convert the pulse events into a heart rate. Since our unit of measurement is
+   beats per minute, our window size will be 60 seconds.
+4. We will use the `suppress` operator to only emit the final computation of the bpm window. We’ll see why this is
+   needed once we discuss this operator later in the chapter.
+5. In order to detect an infection, we will filter all vitals measurements that breach a set of predefined
+   thresholds (`heart rate >= 100` beats per minute, body `temperature >= 100.4°F`).
+6. As we’ll see shortly, windowed aggregations change the record key. Therefore, we’ll need to rekey the heart rate
+   records by patient ID to meet the co-partitioning requirements for joining records.
+7. We will perform a windowed join to combine the two vitals streams. Since we are performing the join after filtering
+   for elevated bpm and body temperature measures, each joined record will indicate an alerting condition for SIRS.
+8. Finally, we will expose the results of our heart rate aggregation via interactive queries. We will also write the
+   output of our joined stream to a topic called alerts.
+
+![](screenshots/patient-monitoring.png)
+
+Create a topics:
+
+```shell
+kafka-topics --create --bootstrap-server localhost:19092 \
+  --replication-factor 2 --partitions 3 \
+  --topic pulse-events
+
+kafka-topics --create --bootstrap-server localhost:19092 \
+  --replication-factor 2 --partitions 3 \
+  --topic body-temp-events
+
+kafka-topics --create --bootstrap-server localhost:19092 \
+  --replication-factor 2 --partitions 3 \
+  --topic sirs-alerts
+
+kafka-topics --create --bootstrap-server localhost:19092 \
+  --replication-factor 2 --partitions 3 \
+  --topic bpm
+```
+
+Run exercise:
+
+```shell
+./gradlew patient-monitoring:run
+```
+
+Produce data:
+
+```shell
+kafka-console-producer \
+  --bootstrap-server localhost:19092 \
+  --topic pulse-events \
+  --property 'parse.key=true' \
+  --property 'key.separator=|' < patient-monitoring/data/pulse-events.json
+
+kafka-console-producer \
+  --bootstrap-server localhost:19092 \
+  --topic body-temp-events \
+  --property 'parse.key=true' \
+  --property 'key.separator=|' < patient-monitoring/data/body-temp-events.json
 ```
