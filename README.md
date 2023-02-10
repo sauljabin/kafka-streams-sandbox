@@ -22,7 +22,7 @@ cd kafka-cluster
 docker compose down
 ```
 
-Open http://localhost:8080/ on the browser.
+Open http://localhost:8080/ on your browser.
 
 ## 1. Sentiment Analysis of Cryptocurrency Tweets
 
