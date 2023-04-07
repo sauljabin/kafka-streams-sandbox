@@ -1,2 +1,2 @@
 rootProject.name = 'kafka-streams-sandbox'
-include('sentiment-analysis', 'game-leaderboard', 'patient-monitoring')
+include('sentiment-analysis', 'game-leaderboard', 'patient-monitoring', 'turbine-controller')

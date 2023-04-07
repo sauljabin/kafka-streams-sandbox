@@ -11,7 +11,7 @@ public class App {
     public static void main(String[] args) {
         Properties config = new Properties();
         config.put(StreamsConfig.APPLICATION_ID_CONFIG, "patient-monitoring");
-        config.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:19092");
+        config.put(StreamsConfig.BOOTSTRAP_SERVERS_CONFIG, "localhost:19093");
 
         KafkaStreams kafkaStreams = new KafkaStreams(MonitoringTopology.build(), config);
         Runtime.getRuntime().addShutdownHook(new Thread(kafkaStreams::close));
