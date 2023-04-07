@@ -285,25 +285,32 @@ following using Kafka Streams’ Processor API:
 ```
 
 With this in mind, our application needs to ingest a stream of sensor data from a set of wind turbines,
-perform some minor processing on the data, and maintain the latest state of each wind turbine in a 
-persistent key-value state store. We will then expose the data via Kafka Streams’ interactive queries feature. 
+perform some minor processing on the data, and maintain the latest state of each wind turbine in a
+persistent key-value state store. We will then expose the data via Kafka Streams’ interactive queries feature.
 
-1. Our Kafka cluster contains two topics, and therefore we need to learn how to add source processors using the Processor API. 
-Here is a description of these topics: 
-  - Each wind turbine (edge node) is outfitted with a set of environmental sensors, and this data (e.g., wind speed), 
-  along with some metadata about the turbine itself (e.g., power state), is sent to the reported-state-events topic periodically. 
-  - The desired-state-events topic is written to whenever a user or process wants to change the power state of a turbine 
-  (i.e., turn it off or on). 
+1. Our Kafka cluster contains two topics, and therefore we need to learn how to add source processors using the Processor API.
+   Here is a description of these topics:
+   - Each wind turbine (edge node) is outfitted with a set of environmental sensors, and this data (e.g., wind speed),
+     along with some metadata about the turbine itself (e.g., power state), is sent to the reported-state-events topic periodically.
+   - The desired-state-events topic is written to whenever a user or process wants to change the power state of a turbine
+     (i.e., turn it off or on).
 2. Since the environmental sensor data is reported in the reported-state-events topic, we will add a stream processor that determines whether or not the reported wind speed for a given turbine exceeds safe operating levels, and if it does, we will automatically generate a shutdown signal. This will teach you how to add a stateless stream processor using the Processor API.
-3. The third step is broken into two parts: 
-  - First, both types of events (reported and desired) will be combined into a so-called digital twin record. These records will be processed and then written to a persistent key-value store called digital-twin-store. In this step, you will learn how to connect to and interact with state stores using the Processor API, and also how to access certain record metadata that isn’t accessible via the DSL. 
-  - The second part of this step involves scheduling a periodic function, called a punctuator, to clean out old digital twin records that haven’t seen an update in more than seven days. This will introduce you to the Processor API’s punctuation interface, and also demonstrate an alternative method for removing keys from state stores.
-4. Each digital twin record will be written to an output topic called digital-twins for analytical purposes. In this step, you will learn how to add sink processors using the Processor API.
-5. We will expose the digital twin records via Kafka Streams’ interactive queries feature. 
-Every few seconds, the microcontroller on the wind turbine will attempt to synchronize its own state with the 
-desired state exposed by Kafka Streams. For example, if we generate a shutdown signal in step 2 
-(which would set the desired power state to OFF), then the turbine would see this desired state when it queries 
-our Kafka Streams app, and kill power to the blades.
+3. The third step is broken into two parts:
+   - First, both types of events (reported and desired) will be combined into a so-called digital twin record.
+     These records will be processed and then written to a persistent key-value store called digital-twin-store.
+     In this step, you will learn how to connect to and interact with state stores using the Processor API, and
+     also how to access certain record metadata that isn’t accessible via the DSL.
+   - The second part of this step involves scheduling a periodic function, called a punctuator,
+     to clean out old digital twin records that haven’t seen an update in more than seven days.
+     This will introduce you to the Processor API’s punctuation interface, and also demonstrate an
+     alternative method for removing keys from state stores.
+4. Each digital twin record will be written to an output topic called digital-twins for analytical purposes.
+   In this step, you will learn how to add sink processors using the Processor API.
+5. We will expose the digital twin records via Kafka Streams’ interactive queries feature.
+   Every few seconds, the microcontroller on the wind turbine will attempt to synchronize its own state with the
+   desired state exposed by Kafka Streams. For example, if we generate a shutdown signal in step 2
+   (which would set the desired power state to OFF), then the turbine would see this desired state when it queries
+   our Kafka Streams app, and kill power to the blades.
 
 ![](screenshots/turbine-controller.png)
 
