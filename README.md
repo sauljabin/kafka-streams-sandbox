@@ -51,7 +51,7 @@ as investment/divestment signals in a custom trading algorithm.
    negative emotion when discussing certain digital currencies. Since a single tweet could mention multiple
    cryptocurrencies, we will demonstrate how to convert each input (tweet) into a variable number of outputs using a
    flatMap operator.
-7. The enriched tweets should be serialized using Avro, and written to an output topic called crypto-sentiment. Our
+7. The enriched tweets should be written to an output topic called crypto-sentiment. Our
    fictional trading algorithm will read from this topic and make investment decisions based on the signals it sees.
 
 ![](screenshots/sentiment-analysis.png)
@@ -59,11 +59,11 @@ as investment/divestment signals in a custom trading algorithm.
 Create a topics:
 
 ```shell
-kafka-topics --create --bootstrap-server localhost:19093 \
+kafka-topics --create --bootstrap-server localhost:19092 \
   --replication-factor 2 --partitions 3 \
   --topic tweets
 
-kafka-topics --create --bootstrap-server localhost:19093 \
+kafka-topics --create --bootstrap-server localhost:19092 \
   --replication-factor 2 --partitions 3 \
   --topic crypto-sentiment
 ```
@@ -77,7 +77,7 @@ Run exercise:
 Produce tweets:
 
 ```shell
-kafka-console-producer --bootstrap-server localhost:19093 \
+kafka-console-producer --bootstrap-server localhost:19092 \
   --topic tweets < sentiment-analysis/data/tweets.json
 ```
 
@@ -115,21 +115,21 @@ processing video game telemetry.
 Create a topics:
 
 ```shell
-kafka-topics --create --bootstrap-server localhost:19093 \
+kafka-topics --create --bootstrap-server localhost:19092 \
   --replication-factor 2 --partitions 3 \
   --topic score-events
 
-kafka-topics --create --bootstrap-server localhost:19093 \
+kafka-topics --create --bootstrap-server localhost:19092 \
   --replication-factor 2 --partitions 3 \
   --config cleanup.policy=compact \
   --topic players
 
-kafka-topics --create --bootstrap-server localhost:19093 \
+kafka-topics --create --bootstrap-server localhost:19092 \
   --replication-factor 2 --partitions 3 \
   --config cleanup.policy=compact \
   --topic products
 
-kafka-topics --create --bootstrap-server localhost:19093 \
+kafka-topics --create --bootstrap-server localhost:19092 \
   --replication-factor 2 --partitions 3 \
   --topic high-scores
 ```
@@ -144,19 +144,19 @@ Produce data:
 
 ```shell
 kafka-console-producer \
-  --bootstrap-server localhost:19093 \
+  --bootstrap-server localhost:19092 \
   --topic players \
   --property 'parse.key=true' \
   --property 'key.separator=|' < game-leaderboard/data/players.json
 
 kafka-console-producer \
-  --bootstrap-server localhost:19093 \
+  --bootstrap-server localhost:19092 \
   --topic products \
   --property 'parse.key=true' \
   --property 'key.separator=|' < game-leaderboard/data/products.json
 
 kafka-console-producer \
-  --bootstrap-server localhost:19093 \
+  --bootstrap-server localhost:19092 \
   --topic score-events < game-leaderboard/data/score-events.json
 ```
 
@@ -198,19 +198,19 @@ alerts topic to notify the appropriate medical personnel.
 Create a topics:
 
 ```shell
-kafka-topics --create --bootstrap-server localhost:19093 \
+kafka-topics --create --bootstrap-server localhost:19092 \
   --replication-factor 2 --partitions 3 \
   --topic pulse-events
 
-kafka-topics --create --bootstrap-server localhost:19093 \
+kafka-topics --create --bootstrap-server localhost:19092 \
   --replication-factor 2 --partitions 3 \
   --topic body-temp-events
 
-kafka-topics --create --bootstrap-server localhost:19093 \
+kafka-topics --create --bootstrap-server localhost:19092 \
   --replication-factor 2 --partitions 3 \
   --topic sirs-alerts
 
-kafka-topics --create --bootstrap-server localhost:19093 \
+kafka-topics --create --bootstrap-server localhost:19092 \
   --replication-factor 2 --partitions 3 \
   --topic bpm
 ```
@@ -225,13 +225,13 @@ Produce data:
 
 ```shell
 kafka-console-producer \
-  --bootstrap-server localhost:19093 \
+  --bootstrap-server localhost:19092 \
   --topic pulse-events \
   --property 'parse.key=true' \
   --property 'key.separator=|' < patient-monitoring/data/pulse-events.json
 
 kafka-console-producer \
-  --bootstrap-server localhost:19093 \
+  --bootstrap-server localhost:19092 \
   --topic body-temp-events \
   --property 'parse.key=true' \
   --property 'key.separator=|' < patient-monitoring/data/body-temp-events.json
@@ -317,15 +317,15 @@ persistent key-value state store. We will then expose the data via Kafka Streams
 Create a topics:
 
 ```shell
-kafka-topics --create --bootstrap-server localhost:19093 \
+kafka-topics --create --bootstrap-server localhost:19092 \
   --replication-factor 2 --partitions 3 \
   --topic reported-state-events
 
-kafka-topics --create --bootstrap-server localhost:19093 \
+kafka-topics --create --bootstrap-server localhost:19092 \
   --replication-factor 2 --partitions 3 \
   --topic desired-state-events
 
-kafka-topics --create --bootstrap-server localhost:19093 \
+kafka-topics --create --bootstrap-server localhost:19092 \
   --replication-factor 2 --partitions 3 \
   --topic digital-twins
 ```
@@ -340,13 +340,13 @@ Produce data:
 
 ```shell
 kafka-console-producer \
-  --bootstrap-server localhost:19093 \
+  --bootstrap-server localhost:19092 \
   --topic reported-state-events \
   --property 'parse.key=true' \
   --property 'key.separator=|' < turbine-controller/data/reported-state-events.json
 
 kafka-console-producer \
-  --bootstrap-server localhost:19093 \
+  --bootstrap-server localhost:19092 \
   --topic desired-state-events \
   --property 'parse.key=true' \
   --property 'key.separator=|' < turbine-controller/data/desired-state-events.json
