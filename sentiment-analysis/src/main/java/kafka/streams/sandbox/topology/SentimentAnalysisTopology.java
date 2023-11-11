@@ -59,8 +59,8 @@ public class SentimentAnalysisTopology {
         sentimentStream.print(Printed.<String, Sentiment>toSysOut().withLabel("mergedStream"));
 
         // step 7 produce sentiment to crypto-sentiment
-        sentimentStream.selectKey((key, sentiment) -> sentiment.getId())
-                .to(CRYPTO_SENTIMENT_TOPIC, Produced.with(Serdes.Long(), new SentimentSerdes()));
+        sentimentStream.selectKey((key, sentiment) -> sentiment.getId().toString())
+                .to(CRYPTO_SENTIMENT_TOPIC, Produced.with(Serdes.String(), new SentimentSerdes()));
 
         return builder.build();
     }
