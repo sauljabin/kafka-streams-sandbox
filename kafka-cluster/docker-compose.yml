@@ -10,8 +10,8 @@ services:
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
       KAFKA_JMX_PORT: "19999"
       CLUSTER_ID: "arN_n1N_QHqihZJPxv7URA"
-      KAFKA_PROCESS_ROLES: 'broker,controller'
-      KAFKA_CONTROLLER_QUORUM_VOTERS: '1@kafka1:9093,2@kafka2:9093,3@kafka3:9093'
+      KAFKA_PROCESS_ROLES: "broker,controller"
+      KAFKA_CONTROLLER_QUORUM_VOTERS: "1@kafka1:9093,2@kafka2:9093,3@kafka3:9093"
     ports:
       - "19092:19092"
       - "19999:19999"
@@ -36,8 +36,8 @@ services:
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
       KAFKA_JMX_PORT: "29999"
       CLUSTER_ID: "arN_n1N_QHqihZJPxv7URA"
-      KAFKA_PROCESS_ROLES: 'broker,controller'
-      KAFKA_CONTROLLER_QUORUM_VOTERS: '1@kafka1:9093,2@kafka2:9093,3@kafka3:9093'
+      KAFKA_PROCESS_ROLES: "broker,controller"
+      KAFKA_CONTROLLER_QUORUM_VOTERS: "1@kafka1:9093,2@kafka2:9093,3@kafka3:9093"
     ports:
       - "29092:29092"
       - "29999:29999"
@@ -62,8 +62,8 @@ services:
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
       KAFKA_JMX_PORT: "39999"
       CLUSTER_ID: "arN_n1N_QHqihZJPxv7URA"
-      KAFKA_PROCESS_ROLES: 'broker,controller'
-      KAFKA_CONTROLLER_QUORUM_VOTERS: '1@kafka1:9093,2@kafka2:9093,3@kafka3:9093'
+      KAFKA_PROCESS_ROLES: "broker,controller"
+      KAFKA_CONTROLLER_QUORUM_VOTERS: "1@kafka1:9093,2@kafka2:9093,3@kafka3:9093"
     ports:
       - "39092:39092"
       - "39999:39999"
@@ -84,14 +84,11 @@ services:
     restart: on-failure
     depends_on:
       kafka1:
-        condition:
-          service_healthy
+        condition: service_healthy
       kafka2:
-        condition:
-          service_healthy
+        condition: service_healthy
       kafka3:
-        condition:
-          service_healthy
+        condition: service_healthy
     healthcheck:
       test: curl http://localhost:8080
       interval: 30s
