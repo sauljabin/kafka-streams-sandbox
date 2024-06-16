@@ -2,10 +2,6 @@
 
 Kafka streams examples collection.
 
-## Kafka CLI
-
-Install kafka cli tools using https://github.com/sauljabin/kafka-cli-installer.
-
 ## Kafka Cluster
 
 Run kafka cluster:
@@ -13,6 +9,8 @@ Run kafka cluster:
 ```shell
 cd kafka-cluster
 docker compose up -d
+kafka-topics --bootstrap-server localhost:19092 --create --topic test
+kafka-topics --bootstrap-server localhost:19092 --list
 ```
 
 Shutdown:
@@ -21,8 +19,6 @@ Shutdown:
 cd kafka-cluster
 docker compose down
 ```
-
-Open http://localhost:8080/ on your browser.
 
 ## 1. Sentiment Analysis of Cryptocurrency Tweets
 
