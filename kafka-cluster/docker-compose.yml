@@ -2,22 +2,23 @@ services:
   kafka1:
     image: apache/kafka:${VERSION}
     environment:
-      KAFKA_NODE_ID: "1"
+      KAFKA_NODE_ID: 1
       KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka1:9092,EXTERNAL://localhost:19092
       KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
       KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
       KAFKA_LISTENERS: CONTROLLER://0.0.0.0:9093,INTERNAL://0.0.0.0:9092,EXTERNAL://0.0.0.0:19092
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
-      CLUSTER_ID: "arN_n1N_QHqihZJPxv7URA"
-      KAFKA_PROCESS_ROLES: "broker,controller"
-      KAFKA_CONTROLLER_QUORUM_VOTERS: "1@kafka1:9093,2@kafka2:9093,3@kafka3:9093"
+      CLUSTER_ID: arN_n1N_QHqihZJPxv7URA
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka1:9093,2@kafka2:9093,3@kafka3:9093
+      KAFKA_LOG_DIRS: /var/lib/kafka/data
     ports:
       - "19092:19092"
     restart: on-failure
     volumes:
       - kafka1_data:/var/lib/kafka/data
     healthcheck:
-      test: kafka-topics --bootstrap-server localhost:9092 --list > /dev/null 2>&1
+      test: /opt/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --list > /dev/null 2>&1
       interval: 30s
       timeout: 30s
       retries: 5
@@ -26,22 +27,23 @@ services:
   kafka2:
     image: apache/kafka:${VERSION}
     environment:
-      KAFKA_NODE_ID: "2"
+      KAFKA_NODE_ID: 2
       KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka2:9092,EXTERNAL://localhost:29092
       KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
       KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
       KAFKA_LISTENERS: CONTROLLER://0.0.0.0:9093,INTERNAL://0.0.0.0:9092,EXTERNAL://0.0.0.0:29092
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
-      CLUSTER_ID: "arN_n1N_QHqihZJPxv7URA"
-      KAFKA_PROCESS_ROLES: "broker,controller"
-      KAFKA_CONTROLLER_QUORUM_VOTERS: "1@kafka1:9093,2@kafka2:9093,3@kafka3:9093"
+      CLUSTER_ID: arN_n1N_QHqihZJPxv7URA
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka1:9093,2@kafka2:9093,3@kafka3:9093
+      KAFKA_LOG_DIRS: /var/lib/kafka/data
     ports:
       - "29092:29092"
     restart: on-failure
     volumes:
       - kafka2_data:/var/lib/kafka/data
     healthcheck:
-      test: kafka-topics --bootstrap-server localhost:9092 --list > /dev/null 2>&1
+      test: /opt/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --list > /dev/null 2>&1
       interval: 30s
       timeout: 30s
       retries: 5
@@ -50,22 +52,23 @@ services:
   kafka3:
     image: apache/kafka:${VERSION}
     environment:
-      KAFKA_NODE_ID: "3"
+      KAFKA_NODE_ID: 3
       KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka3:9092,EXTERNAL://localhost:39092
       KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
       KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
       KAFKA_LISTENERS: CONTROLLER://0.0.0.0:9093,INTERNAL://0.0.0.0:9092,EXTERNAL://0.0.0.0:39092
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
-      CLUSTER_ID: "arN_n1N_QHqihZJPxv7URA"
-      KAFKA_PROCESS_ROLES: "broker,controller"
-      KAFKA_CONTROLLER_QUORUM_VOTERS: "1@kafka1:9093,2@kafka2:9093,3@kafka3:9093"
+      CLUSTER_ID: arN_n1N_QHqihZJPxv7URA
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka1:9093,2@kafka2:9093,3@kafka3:9093
+      KAFKA_LOG_DIRS: /var/lib/kafka/data
     ports:
       - "39092:39092"
     restart: on-failure
     volumes:
       - kafka3_data:/var/lib/kafka/data
     healthcheck:
-      test: kafka-topics --bootstrap-server localhost:9092 --list > /dev/null 2>&1
+      test: /opt/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --list > /dev/null 2>&1
       interval: 30s
       timeout: 30s
       retries: 5
